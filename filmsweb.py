@@ -48,7 +48,12 @@ mycursor = mydb.cursor()
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
-# mycursor.execute('''insert into etudiants values(1,'bob leponge'), (2, 'dora lexploratrice'), (3, 'koro-sensei')''')
+#mycursor.execute('''insert into Genre values(2,'sf'), (3,'aventure'), (4,'policier')''')
+
+#mycursor.execute('''insert into Nationalite values(1, 'français'), (2, 'anglais'), (3, 'américain')''')
+
+# mycursor.execute('''insert into Film values (1, 'OSS 117', 120, 2012, 'rien rien tqt', 3, 1)''')
+
 # mydb.commit()
 
 
