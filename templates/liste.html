@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        td{
+
+            border: solid 2px rgb(55, 55, 55);
+            text-align: center;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        table{
+
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <table>
+
+        <tr>
+
+            <td name="entete"><h1>Nom</h1></td>
+            <td name="entete"><h1>Prix</h1></td>
+            <td name="entete"><h1>Description</h1></td>
+
+        </tr>
+
+        {% for game in g%}
+
+        <tr>
+
+
+            <td>{{game.name}}</td>
+            <td>{{game.price}}</td>
+            <td>{{game.depiction}}</td>
+            <td><a href="delete/{{loop.index0}}"><button>Supprimer</button></a></td>
+            <td><a href="update/{{loop.index0}}"><button>Modifier</button></a></td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <a href="/saisie"><button>Retour à la saisie</button></a>
+</body>
+</html>
