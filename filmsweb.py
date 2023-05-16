@@ -77,5 +77,36 @@ def index():
     #return ("<html><body><p1>Hello world</p1></body></html>")
     return render_template("liste.html")
 
+@app.route("/inscription", methods=['GET', 'POST'])
+def liste():
+
+    global prenom
+    global nom
+    global username
+    global email
+    global password 
+
+    # Version GET
+
+    # nom = request.args.get("name")
+    # prix = request.args.get("price")
+    # description = request.args.get("depiction")
+
+    # Version POST
+
+    if(request.method == 'POST'):
+        nom = request.form["nom"]
+        prenom = request.form["prénom"]
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+        #games.append( {"name":nom, "price":prix, "depiction":description})
+        
+
+
+    return render_template("liste.html", g = games)
+    # return result + "</table><a href='/saisie'><button>Retour à la saisie</button></a>"
+    # return "<p>" + games[0].price + "</p>"
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
