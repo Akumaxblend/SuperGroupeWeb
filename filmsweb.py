@@ -49,35 +49,35 @@ mydb.commit()
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
-mycursor.execute('''insert into Genre values(2,'sf'), (3,'aventure'), (4,'policier')''')
+# mycursor.execute('''insert into Genre values(2,'sf'), (3,'aventure'), (4,'policier')''')
 
-mycursor.execute('''insert into Nationalite values(1, 'français'), (2, 'anglais'), (3, 'américain')''')
+# mycursor.execute('''insert into Nationalite values(1, 'français'), (2, 'anglais'), (3, 'américain')''')
 
-mycursor.execute('''insert into Film values (1, 'OSS 117', 120, 2012, 'rien rien tqt', 3, 1)''')
+# mycursor.execute('''insert into Film values (1, 'OSS 117', 120, 2012, 'rien rien tqt', 3, 1)''')
 
-mydb.commit()
+# mydb.commit()
 
 
-ajout = input("quel nom voulez vous ajouter ?")
+# ajout = input("quel nom voulez vous ajouter ?")
 
-mycursor.execute('''Insert into Genre values(5,%s)''',(ajout,))
-mydb.commit()
+# mycursor.execute('''Insert into Genre values(5,%s)''',(ajout,))
+# mydb.commit()
 
 # mycursor.execute('''Delete from etudiants where id = 2''')
 # mydb.commit()
 
-mycursor.execute('''select * from Genre''')
-etuds = mycursor.fetchall()
-mydb.commit()
-print(etuds)
+# mycursor.execute('''select * from Genre''')
+# etuds = mycursor.fetchall()
+# mydb.commit()
+# print(etuds)
 
 @app.route("/")
 def index():
     
     #return ("<html><body><p1>Hello world</p1></body></html>")
-    return render_template("liste.html")
+    return render_template("formulaire_insc.html")
 
-@app.route("/inscription", methods=['GET', 'POST'])
+@app.route("/inscription/send", methods=['GET', 'POST'])
 def liste():
 
     global prenom
@@ -101,10 +101,13 @@ def liste():
         email = request.form["email"]
         password = request.form["password"]
         #games.append( {"name":nom, "price":prix, "depiction":description})
+    
+    mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, %s)''', (nom, prenom, username, email, password))
+    mydb.commit()
         
+    return render_template("liste.html")
 
-
-    return render_template("liste.html", g = games)
+    #return render_template("liste.html", g = games)
     # return result + "</table><a href='/saisie'><button>Retour à la saisie</button></a>"
     # return "<p>" + games[0].price + "</p>"
 
