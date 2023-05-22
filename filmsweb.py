@@ -22,6 +22,8 @@ mycursor = mydb.cursor()
 # mydb.commit()
 # print(etuds)
 
+films = []
+
 @app.route("/")
 def index():
     
@@ -83,7 +85,22 @@ def insert_film():
     mycursor.execute('''INSERT INTO Film(titre, duree, anneSortie, synopsis) VALUES (%s, %s, %s, %s)''', (nom_film, duree, annee, synopsis))
     mydb.commit()
 
-    return render_template("liste.html")
+    return redirect("/films")
+
+@app.route("/films")
+def display_films():
+
+    mycursor.execute('''SELECT COUNT(*) FROM Film''')
+    filmsCount = mycursor.fetchone()
+
+    mycursor.execute('''SELECT * FROM Film''')
+
+    for tmp in mycursor:
+
+        films.append({"titre":tmp[0], "duree":tmp[1], "annee":tmp[2], "synopsis":tmp[3]})
+
+    return render_template("liste.html", f = films)
+
 
 
 if __name__ == "__main__":

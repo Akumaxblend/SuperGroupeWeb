@@ -41,14 +41,15 @@
 
         </tr>
 
-        {% for game in g%}
+        {% for film in f%}
 
         <tr>
 
 
-            <td>{{game.name}}</td>
-            <td>{{game.price}}</td>
-            <td>{{game.depiction}}</td>
+            <td>{{film.titre}}</td>
+            <td>{{film.annee}}</td>
+            <td>{{film.synopsis}}</td>
+            <td>{{film.duree}}</td>
             <td><a href="delete/{{loop.index0}}"><button>Supprimer</button></a></td>
             <td><a href="update/{{loop.index0}}"><button>Modifier</button></a></td>
 
@@ -58,6 +59,6 @@
 
     </table>
 
-    <a href="/saisie"><button>Retour à la saisie</button></a>
+    <a href="/saisie_film"><button>Retour à la saisie</button></a>
 </body>
 </html>
