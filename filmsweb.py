@@ -30,7 +30,7 @@ def index():
     #return ("<html><body><p1>Hello world</p1></body></html>")
     return render_template("formulaire_insc.html")
 
-@app.route("/inscription/send", methods=['POST'])
+@app.route("/inscription", methods=['POST'])
 def insert_user():
 
     global prenom
@@ -59,6 +59,15 @@ def insert_user():
     mydb.commit()
         
     return render_template("liste.html")
+
+@app.route("/connexion")
+def login():
+   return render_template('formulaire_user_connect.html')
+
+@app.route("/profil")
+def profil_user():
+    return render_template("useraccount.html")
+
 
 @app.route("/saisie_film")
 def form_films():

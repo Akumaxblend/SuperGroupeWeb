@@ -7,12 +7,19 @@
     <title>User</title>
 </head>
 <body>
-
-    <form action="/connexion/send" method="post">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+    <form action="/connexion" method="post">
     
         <div>
-            <label for="username"> Username : </label> 
-            <input type="text" name="username"> <br><br>
+            <label for="email"> email : </label> 
+            <input type="text" name="email"> <br><br>
         </div>
 
         <div>
