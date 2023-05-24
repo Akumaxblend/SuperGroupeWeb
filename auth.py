@@ -22,8 +22,8 @@ def login():
     #TODO transformer query en requête sql
     user = 'SELECT email FROM Utilisateur where mail=%s'
     pass_user = 'SELECT mdp FROM Utilisateur where email=%s'
-    mycursor.execute(user, (str(email)))
-    mycursor.execute(pass_user, (str(email)))
+    mycursor.execute(user, (str(email),))
+    mycursor.execute(pass_user, (str(email),))
 
     if not user or not check_password_hash(pass_user, password):
         flash('Please check your login details and try again.')
