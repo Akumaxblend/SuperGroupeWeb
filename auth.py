@@ -45,9 +45,9 @@ def insert_user():
     if user: 
         return redirect(url_for('auth.signup'))
     
-    password=generate_password_hash(password, method='sha256')
+    pwd_hash=generate_password_hash(password, method='sha256')
     #jsp si le password fonctionne
-    mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, {password})''', (nom, prenom, username, email, password))
+    mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, {pwd_hash})''', (nom, prenom, username, email, password))
     mydb.commit()
 
     # return render_template('formulaire_insc.html')

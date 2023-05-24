@@ -1,33 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends "base.html" %}
 
-    <style>
+{% block content %}
 
-        td{
 
-            border: solid 2px rgb(55, 55, 55);
-            text-align: center;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-
-        table{
-
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
-
-        
-    </style>
-</head>
-<body>
     <table>
 
         <tr>
@@ -60,5 +35,4 @@
     </table>
 
     <a href="/saisie_film"><button>Retour à la saisie</button></a>
-</body>
-</html>
+{% endblock %}
