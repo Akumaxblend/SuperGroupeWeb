@@ -3,6 +3,7 @@ from flask import Flask,query,request,render_template,jsonify,abort,redirect, ur
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 auth = Flask('auth', __name__)
 CORS(auth)
 
@@ -18,15 +19,19 @@ mycursor = mydb.cursor()
 def login():
     email = request.form.get('email')
     password = request.form.get('password')
-    user = query.filter_by(email=email).first()
+    #TODO transformer query en requête sql
+    user = 'SELECT email FROM Utilisateur where mail=%s'
+    pass_user = 'SELECT mdp FROM Utilisateur where email=%s'
+    mycursor.execute(user, (str(email)))
+    mycursor.execute(pass_user, (str(email)))
 
-    if not user or not check_password_hash(user.password, password):
+    if not user or not check_password_hash(pass_user, password):
         flash('Please check your login details and try again.')
         return redirect(url_for('auth.login'))
     return redirect(url_for('app.profil'))
 
 
-    return render_template('formulaire_user_connect.html')
+    #return render_template('formulaire_user_connect.html')
 
 
 @auth.route('/inscription', methods=['POST'])
@@ -37,17 +42,14 @@ def insert_user():
     email = request.form.get["email"]
     password = request.form.get["password"]
 
-    # email = request.form.get('email')
-    # name = request.form.get('name')
-    # password = request.form.get('password')
-
-    user = query.filter_by(email=email).first()
-    if user: 
-        return redirect(url_for('auth.signup'))
+    #A FAIRE POUR VERIFIER SI LE COMPTE EXISTE DEJA
+    #user = query.filter_by(email=email).first()
+    #if user: 
+    #    return redirect(url_for('auth.signup'))
     
     pwd_hash=generate_password_hash(password, method='sha256')
     #jsp si le password fonctionne
-    mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, {pwd_hash})''', (nom, prenom, username, email, password))
+    mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, %s)''', (nom, prenom, username, email, pwd_hash))
     mydb.commit()
 
     # return render_template('formulaire_insc.html')
