@@ -21,7 +21,9 @@ def login():
     password = request.form.get('password')
     #TODO transformer query en requête sql
     user = 'SELECT email FROM Utilisateur where mail=%s'
+    print(user)
     pass_user = 'SELECT mdp FROM Utilisateur where email=%s'
+    print(pass_user)
     mycursor.execute(user, (str(email),))
     mycursor.execute(pass_user, (str(email),))
 
