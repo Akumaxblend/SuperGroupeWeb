@@ -156,6 +156,9 @@ def display_commentaires(idFilm):
 
     mycursor.execute(f"SELECT COUNT(*) FROM Commentaires WHERE idFilm={idFilm}")
 
+    if commentaires is None:
+        return "pas de commentaires"
+
     for tmp in mycursor:
 
         commentaires.append({"texte":tmp[1], "pseudo":tmp[2]})

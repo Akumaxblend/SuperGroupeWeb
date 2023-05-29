@@ -39,13 +39,18 @@
 
         <div>affichage com</div>
 
-        {% for commentaire in c %}
-            <tr>
-                <td>{{ commentaire.texte }}</td>
-                <td>{{ commentaire.pseudo }}</td>
-                <td>{{ commentaire.created_at }}</td>
-            </tr>
-        {% endfor %}
+        {% if commentaires %}
+
+            {% for commentaire in c %}
+                <tr>
+                    <td>{{ commentaire.texte }}</td>
+                    <td>{{ commentaire.pseudo }}</td>
+                    <td>{{ commentaire.created_at }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>aucun commentaire n'a été rentré</p>
+        {% endif %}
 
 
     </div>
