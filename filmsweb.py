@@ -134,7 +134,7 @@ def show_film(idFilm):
 
     for tmp in mycursor:
 
-        commentaires.append({"texte":tmp[1], "pseudo":tmp[2]})
+        commentaires.append({"created_at":tmp[0],"texte":tmp[1], "pseudo":tmp[2]})
 
     return render_template("/film.html", c = commentaires, film=film)
 
