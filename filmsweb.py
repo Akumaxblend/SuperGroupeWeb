@@ -28,7 +28,8 @@ films = []
 def index():
     
     #return ("<html><body><p1>Hello world</p1></body></html>")
-    return render_template("formulaire_insc.html")
+    #return render_template("formulaire_insc.html")
+    return redirect("/films")
 
 @app.route("/inscription", methods=['POST'])
 def insert_user():
@@ -99,6 +100,8 @@ def insert_film():
 @app.route("/films")
 def display_films():
 
+    films.clear()
+
     mycursor.execute('''SELECT COUNT(*) FROM Film''')
     filmsCount = mycursor.fetchone()
 
@@ -106,12 +109,15 @@ def display_films():
 
     for tmp in mycursor:
 
-        films.append({"titre":tmp[0], "duree":tmp[1], "annee":tmp[2], "synopsis":tmp[3]})
+        films.append({"titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4]})
 
     return render_template("liste.html", f = films)
 
-
-
+@app.route("/delete/<string:titre>+<int:annee>")
+def delete_film(titre, annee):
+    mycursor.execute('''DELETE from Film WHERE titre = %s AND anneSortie = %s''', (titre, annee))
+    mydb.commit()
+    return redirect("/films")
 
 
 if __name__ == "__main__":

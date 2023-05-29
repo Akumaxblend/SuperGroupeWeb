@@ -20,12 +20,13 @@
 
         <tr>
 
-
             <td>{{film.titre}}</td>
             <td>{{film.annee}}</td>
             <td>{{film.synopsis}}</td>
             <td>{{film.duree}}</td>
-            <td><a href="delete/{{loop.index0}}"><button>Supprimer</button></a></td>
+            <td></td>
+            <td></td>
+            <td><a href="delete/{{film.titre}}+{{film.annee}}"><button>Supprimer</button></a></td>
             <td><a href="update/{{loop.index0}}"><button>Modifier</button></a></td>
 
         </tr>
