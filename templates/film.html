@@ -2,14 +2,13 @@
 
 {% block content %}
 
-    <h1>{{ film.titre }}</h1>
+    <h1>{{ film[1] }}</h1>
 
     <div>
-        <p>durée : {{ film.duree }}</p><br>
-        <p>annee sortie : {{ film.annee }}</p><br>
-        <p>synopsis : {{ film.synopsis }}</p><br>
-        <p>genre : {{ film.genre }}</p><br>
-        <p>nationalité : </p>
+        <p>durée : {{ film[2] }}</p><br>
+        <p>annee sortie : {{ film[3] }}</p><br>
+        <p>synopsis : {{ film[4] }}</p><br>
+        <p>genre : {{ film[5] }}</p><br>
     </div>
 
     <h2>Commentaires</h2>
@@ -17,7 +16,7 @@
     <div>
         <div>formulaire comm</div>
 
-        <form action="/commentaires/send" method="post">
+        <form action="/commentaires/send/{{film[0]}}" method="post">
         
             <div>
                 <label for="pseudo"> Votre pseudo : </label> 
@@ -39,18 +38,18 @@
 
         <div>affichage com</div>
 
-        {% if commentaires %}
+        <!-- {% if c %} -->
 
-            {% for commentaire in c %}
+            {% for commentaires in c %}
                 <tr>
-                    <td>{{ commentaire.texte }}</td>
-                    <td>{{ commentaire.pseudo }}</td>
-                    <td>{{ commentaire.created_at }}</td>
+                    <td>{{ commentaires.texte }}</td>
+                    <td>{{ commentaires.pseudo }}</td>
+                    <!-- <td>{{ commentaires.created_at }}</td> -->
                 </tr>
             {% endfor %}
-        {% else %}
+        <!-- {% else %}
             <p>aucun commentaire n'a été rentré</p>
-        {% endif %}
+        {% endif %} -->
 
 
     </div>

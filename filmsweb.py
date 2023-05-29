@@ -110,7 +110,7 @@ def display_films():
 
     for tmp in mycursor:
 
-        films.append({"titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4], "genre":tmp[5]})
+        films.append({"idFilm": tmp[0], "titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4], "genre":tmp[5]})
 
     return render_template("liste.html", f = films)
 
@@ -118,20 +118,29 @@ def display_films():
 def get_film(idFilm):
     mycursor.execute(f"SELECT * FROM Film WHERE idFilm = {idFilm}")
     film = mycursor.fetchone()
-    mycursor.close()
+    #mycursor.close()
     return film
 
 #là on récup les données pour afficher la page
-@app.route('/films/<int:id_film>')
+@app.route('/films/<int:idFilm>', methods=["GET"])
 def show_film(idFilm):
     film = get_film(idFilm)
     if film is None:
         return "Film non trouvé"
-    return render_template('film.html', film=film)
+
+    commentaires.clear()
+
+    mycursor.execute(f"SELECT * FROM Commentaire WHERE idFilm={idFilm}")
+
+    for tmp in mycursor:
+
+        commentaires.append({"texte":tmp[1], "pseudo":tmp[2]})
+
+    return render_template("/film.html", c = commentaires, film=film)
 
 
-@app.route("/commentaires/send", methods=["POST"])
-def insert_com():
+@app.route("/commentaires/send/<int:idFilm>", methods=["POST"])
+def insert_com(idFilm):
 
     global texte
     global pseudo
@@ -141,33 +150,12 @@ def insert_com():
         pseudo = request.form["pseudo"]
         
 
-    mycursor.execute('''INSERT INTO Commentaire(texte, pseudo) VALUES (%s, %s,)''', (texte, pseudo))
+    mycursor.execute('''INSERT INTO Commentaire(texte, pseudo, idFilm) VALUES (%s, %s, %s)''', (texte, pseudo, idFilm))
     mydb.commit()
 
-    return redirect("/films/<int:id_film>")
+    return redirect(f"/films/{idFilm}")
 
-@app.route("/films/<int:id_film>")
-def display_commentaires(idFilm):
-
-    commentaires.clear()
-
-    mycursor.execute(f"SELECT COUNT(*) FROM Commentaires WHERE idFilm={idFilm}")
-    #comCount = mycursor.fetchone()
-
-    mycursor.execute(f"SELECT COUNT(*) FROM Commentaires WHERE idFilm={idFilm}")
-
-    if commentaires is None:
-        return "pas de commentaires"
-
-    for tmp in mycursor:
-
-        commentaires.append({"texte":tmp[1], "pseudo":tmp[2]})
-
-    return render_template("/films/<int:id_film>", c = commentaires)
-
-
-
-
+# @app.route("/films/<int:idFilm>")
 
 @app.route("/delete/<string:titre>+<int:annee>")
 def delete_film(titre, annee):
@@ -175,8 +163,8 @@ def delete_film(titre, annee):
     mydb.commit()
     return redirect("/films")
 
-@app.route("/update/<string:titre>+<int:annee")
-def update_film(titre, annee):
+# @app.route("/update/<string:titre>+<int:annee")
+# def update_film(titre, annee):
 
 
 if __name__ == "__main__":
