@@ -23,6 +23,7 @@ mycursor = mydb.cursor()
 # print(etuds)
 
 films = []
+commentaires=[]
 
 @app.route("/")
 def index():
@@ -112,6 +113,61 @@ def display_films():
         films.append({"titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4], "genre":tmp[5]})
 
     return render_template("liste.html", f = films)
+
+#on récupère un film pour faire l'affichage d'une seule page film
+def get_film(idFilm):
+    mycursor.execute(f"SELECT * FROM Film WHERE idFilm = {idFilm}")
+    film = mycursor.fetchone()
+    mycursor.close()
+    return film
+
+#là on récup les données pour afficher la page
+@app.route('/films/<int:id_film>')
+def show_film(idFilm):
+    film = get_film(idFilm)
+    if film is None:
+        return "Film non trouvé"
+    return render_template('film.html', film=film)
+
+
+@app.route("/commentaires/send", methods=["POST"])
+def insert_com():
+
+    global texte
+    global pseudo
+
+    if(request.method == 'POST'):
+        texte = request.form["texte"]
+        pseudo = request.form["pseudo"]
+        
+
+    mycursor.execute('''INSERT INTO Commentaire(texte, pseudo) VALUES (%s, %s,)''', (texte, pseudo))
+    mydb.commit()
+
+    return redirect("/films/<int:id_film>")
+
+@app.route("/films/<int:id_film>")
+def display_commentaires(idFilm):
+
+    commentaires.clear()
+
+    mycursor.execute(f"SELECT COUNT(*) FROM Commentaires WHERE idFilm={idFilm}")
+    #comCount = mycursor.fetchone()
+
+    mycursor.execute(f"SELECT COUNT(*) FROM Commentaires WHERE idFilm={idFilm}")
+
+    if commentaires is None:
+        return "pas de commentaires"
+
+    for tmp in mycursor:
+
+        commentaires.append({"texte":tmp[1], "pseudo":tmp[2]})
+
+    return render_template("/films/<int:id_film>", c = commentaires)
+
+
+
+
 
 @app.route("/delete/<string:titre>+<int:annee>")
 def delete_film(titre, annee):

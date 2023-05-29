@@ -19,7 +19,7 @@ mycursor.execute('''create table Genre (idGenre int primary key auto_increment, 
 
 mycursor.execute('''create table Nationalite (idNationalite int primary key auto_increment, nomN varchar(50))''')
 
-mycursor.execute('''create table Film (idFilm int primary key auto_increment,  titre varchar(50), duree int, anneSortie int, synopsis varchar(140), genre varchar(50))''')
+mycursor.execute('''create table Film (idFilm int primary key auto_increment,  titre varchar(50), duree int, anneSortie int, synopsis varchar(140), idGenre int, idNationalite int, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, CONSTRAINT fk_idgenre FOREIGN KEY (idGenre) REFERENCES Genre(idGenre), CONSTRAINT fk_idnationalite FOREIGN KEY (idNationalite) REFERENCES Nationalite(idNationalite))''')
 
 mycursor.execute(''' create table Utilisateur (idUser int primary key auto_increment, nom varchar(50), prenom varchar(50), pseudo varchar(50), mail varchar(50), mdp varchar (50))''')
 
@@ -27,6 +27,6 @@ mycursor.execute('''create table AVu(idFilm int, idUser int, CONSTRAINT fk_idFil
 
 mycursor.execute('''create table AAime(idFilm int, idUser int, CONSTRAINT fk_idFilm2 FOREIGN KEY (idFilm) REFERENCES Film(idFilm), CONSTRAINT fk_idUser2 FOREIGN KEY (idUser) REFERENCES Utilisateur(idUser))''')
 
-mycursor.execute('''create table Commentaire(idCom int primary key auto_increment, texte varchar(140), idFilm int, idUser int, CONSTRAINT fk_idFilm3 FOREIGN KEY (idFilm) REFERENCES Film(idFilm), CONSTRAINT fk_idUser3 FOREIGN KEY (idUser) REFERENCES Utilisateur(idUser))''')
-
+mycursor.execute('''create table Commentaire(idCom int primary key auto_increment, texte varchar(140), pseudo varchar(50), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, idFilm int, CONSTRAINT fk_idFilm3 FOREIGN KEY (idFilm) REFERENCES Film(idFilm)''')
+#date ajout
 mydb.commit()
