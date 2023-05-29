@@ -89,10 +89,10 @@ def insert_film():
         duree = request.form["duree"]
         annee = request.form["année"]
         synopsis = request.form["synopsis"]
-        genre = request.form["genre"]
+        genre = request.form["genres"]
         nationalite = request.form["nationalite"]
 
-    mycursor.execute('''INSERT INTO Film(titre, duree, anneSortie, synopsis) VALUES (%s, %s, %s, %s)''', (nom_film, duree, annee, synopsis))
+    mycursor.execute('''INSERT INTO Film(titre, duree, anneSortie, synopsis, genre) VALUES (%s, %s, %s, %s, %s)''', (nom_film, duree, annee, synopsis, genre))
     mydb.commit()
 
     return redirect("/films")
@@ -109,7 +109,7 @@ def display_films():
 
     for tmp in mycursor:
 
-        films.append({"titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4]})
+        films.append({"titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4], "genre":tmp[5]})
 
     return render_template("liste.html", f = films)
 
@@ -118,6 +118,9 @@ def delete_film(titre, annee):
     mycursor.execute('''DELETE from Film WHERE titre = %s AND anneSortie = %s''', (titre, annee))
     mydb.commit()
     return redirect("/films")
+
+@app.route("/update/<string:titre>+<int:annee")
+def update_film(titre, annee):
 
 
 if __name__ == "__main__":

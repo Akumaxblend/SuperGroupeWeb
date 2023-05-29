@@ -19,7 +19,7 @@ mycursor.execute('''create table Genre (idGenre int primary key auto_increment, 
 
 mycursor.execute('''create table Nationalite (idNationalite int primary key auto_increment, nomN varchar(50))''')
 
-mycursor.execute('''create table Film (idFilm int primary key auto_increment,  titre varchar(50), duree int, anneSortie int, synopsis varchar(140), idGenre int, idNationalite int, CONSTRAINT fk_idgenre FOREIGN KEY (idGenre) REFERENCES Genre(idGenre), CONSTRAINT fk_idnationalite FOREIGN KEY (idNationalite) REFERENCES Nationalite(idNationalite))''')
+mycursor.execute('''create table Film (idFilm int primary key auto_increment,  titre varchar(50), duree int, anneSortie int, synopsis varchar(140), genre varchar(50))''')
 
 mycursor.execute(''' create table Utilisateur (idUser int primary key auto_increment, nom varchar(50), prenom varchar(50), pseudo varchar(50), mail varchar(50), mdp varchar (50))''')
 
