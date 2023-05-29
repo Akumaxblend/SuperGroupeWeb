@@ -38,8 +38,8 @@
 
         <div>affichage com</div>
 
-        <!-- {% if c %} -->
-
+        {% if c %}
+        <table>
             {% for commentaires in c %}
                 <tr>
                     <td>{{ commentaires.texte }}</td>
@@ -47,9 +47,10 @@
                     <td>{{ commentaires.created_at }}</td>
                 </tr>
             {% endfor %}
-        <!-- {% else %}
+        </table>
+        {% else %}
             <p>aucun commentaire n'a été rentré</p>
-        {% endif %} -->
+        {% endif %}
 
 
     </div>
