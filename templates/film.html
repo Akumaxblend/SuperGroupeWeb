@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>{{ film.titre }}</h1>
+
+    <div>
+        <p>durée : {{ film.duree }}</p><br>
+        <p>annee sortie : {{ film.annee }}</p><br>
+        <p>synopsis : {{ film.synopsis }}</p><br>
+        <p>genre : {{ film.genre }}</p><br>
+        <p>nationalité : </p>
+    </div>
+
+    <h2>Commentaires</h2>
+
+    <div>
+        <div>formulaire comm</div>
+
+        <form action="/commentaires/send" method="post">
+        
+            <div>
+                <label for="pseudo"> Votre pseudo : </label> 
+                <input type="text" name="pseudo"> <br><br>
+            </div>
+
+            <div>
+                <label for="texte"> Ecrire Commentaire : </label> 
+                <textarea type="text" name="texte"></textarea> <br><br>
+            </div>
+        
+            <div>
+                <label for="commentaire"> </label> 
+                <button type="submit"> Envoyer com</button><br><br>
+            </div>
+    
+        </form>
+
+
+        <div>affichage com</div>
+
+        {% for commentaire in c %}
+            <tr>
+                <td>{{ commentaire.texte }}</td>
+                <td>{{ commentaire.pseudo }}</td>
+                <td>{{ commentaire.created_at }}</td>
+            </tr>
+        {% endfor %}
+
+
+    </div>
+
+    
+
+{% endblock %}
