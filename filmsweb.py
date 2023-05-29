@@ -82,8 +82,7 @@ def insert_film():
     global duree
     global annee
     global synopsis
-    global genre 
-    global nationalite
+    global genre
 
     if(request.method == 'POST'):
         nom_film = request.form["nom"]
@@ -91,7 +90,6 @@ def insert_film():
         annee = request.form["année"]
         synopsis = request.form["synopsis"]
         genre = request.form["genres"]
-        nationalite = request.form["nationalite"]
 
     mycursor.execute('''INSERT INTO Film(titre, duree, anneSortie, synopsis, genre) VALUES (%s, %s, %s, %s, %s)''', (nom_film, duree, annee, synopsis, genre))
     mydb.commit()
@@ -163,9 +161,35 @@ def delete_film(titre, annee):
     mydb.commit()
     return redirect("/films")
 
-# @app.route("/update/<string:titre>+<int:annee")
-# def update_film(titre, annee):
+@app.route("/update/<string:titre>+<int:annee>")
+def update_film(titre, annee):
+    mycursor.execute('''SELECT * from Film WHERE titre = %s AND anneSortie = %s''', (titre, annee))
+    film = mycursor.fetchone()
+    print(film[1])
+    return render_template("formulaire_film_modif.html", f = film)
 
+@app.route("/update/send/<int:id>", methods=["POST"])
+def send_update_film(id):
+
+    global nom_film
+    global duree
+    global annee
+    global synopsis
+    global genre 
+
+
+    if(request.method == 'POST'):
+        nom_film = request.form["nom"]
+        duree = request.form["duree"]
+        annee = request.form["année"]
+        synopsis = request.form["synopsis"]
+        genre = request.form["genres"]
+
+    mycursor.execute('''UPDATE Film SET titre=%s, duree=%s, anneSortie=%s, synopsis=%s, genre=%s WHERE idFilm=%s''', (nom_film, duree, annee, synopsis, genre, id))
+    mydb.commit()
+
+    return redirect("/films")
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

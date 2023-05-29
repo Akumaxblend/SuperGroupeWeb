@@ -2,6 +2,8 @@
 
 {% block content %}
 
+    <a href="/saisie_film"><button>Saisir un film</button></a>
+    {% if f %}
 
     <table>
 
@@ -33,5 +35,9 @@
 
     </table>
 
-    <a href="/saisie_film"><button>Retour à la saisie</button></a>
+    {% else %}
+
+        <h1>Aucun film pour le moment - ajoutez votre premier film ! </h1>
+
+    {%endif%}
 {% endblock %}

@@ -23,6 +23,6 @@ mycursor.execute('''create table AVu(idFilm int, idUser int, CONSTRAINT fk_idFil
 
 mycursor.execute('''create table AAime(idFilm int, idUser int, CONSTRAINT fk_idFilm2 FOREIGN KEY (idFilm) REFERENCES Film(idFilm), CONSTRAINT fk_idUser2 FOREIGN KEY (idUser) REFERENCES Utilisateur(idUser))''')
 
-mycursor.execute('''create table Commentaire(idCom int primary key auto_increment, texte varchar(140), pseudo varchar(50), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, idFilm int, CONSTRAINT fk_idFilm3 FOREIGN KEY (idFilm) REFERENCES Film(idFilm))''')
+mycursor.execute('''create table Commentaire(idCom int primary key auto_increment, texte varchar(140), pseudo varchar(50), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, idFilm int, CONSTRAINT fk_idFilm3 FOREIGN KEY (idFilm) REFERENCES Film(idFilm) ON DELETE CASCADE)''')
 #date ajout
 mydb.commit()
