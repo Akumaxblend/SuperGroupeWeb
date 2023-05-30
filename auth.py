@@ -1,8 +1,7 @@
 import mysql.connector
-from flask import Flask,query,request,render_template,jsonify,abort,redirect, url_for, flash
+from flask import Flask,query,request,session,render_template,jsonify,abort,redirect, url_for, flash
 from flask_cors import CORS
-from werkzeug.security import generate_password_hash, check_password_hash
-
+import hashlib 
 
 auth = Flask('auth', __name__)
 CORS(auth)
@@ -14,27 +13,6 @@ mydb = mysql.connector.connect(
     database="FilmsWeb"
 )
 mycursor = mydb.cursor()
-
-@auth.route('/connexion')
-def login():
-    email = request.form.get('email')
-    password = request.form.get('password')
-    #TODO transformer query en requête sql
-    user = 'SELECT email FROM Utilisateur where mail=%s'
-    print("user : ",user)
-    pass_user = 'SELECT mdp FROM Utilisateur where email=%s'
-    print("mdp : ",pass_user)
-    mycursor.execute(user, (str(email),))
-    mycursor.execute(pass_user, (str(email),))
-
-    if not user or not check_password_hash(pass_user, password):
-        flash('Please check your login details and try again.')
-        return redirect(url_for('auth.login'))
-    return redirect(url_for('app.profil'))
-
-
-    #return render_template('formulaire_user_connect.html')
-
 
 @auth.route('/inscription', methods=['POST'])
 def insert_user():
@@ -48,15 +26,46 @@ def insert_user():
     #user = query.filter_by(email=email).first()
     #if user: 
     #    return redirect(url_for('auth.signup'))
+    hasher = hashlib.sha256()
+    hasher.update(password.encode('utf-8'))
+    pwd_hash=hasher.hexdigest()
     
-    pwd_hash=generate_password_hash(password, method='sha256')
     #jsp si le password fonctionne
-    mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, %s)''', (nom, prenom, username, email, pwd_hash))
+    mycursor.execute(f"INSERT INTO Utilisateur (nom, prenom, username, email, password) VALUES ('{nom}', '{prenom}', '{username}', '{email}', '{pwd_hash}')")
     mydb.commit()
 
     # return render_template('formulaire_insc.html')
-    return redirect(url_for('auth.login'))
+    return redirect('profil.html')
+
+@auth.route('/connexion')
+def login():
+
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+    hasher = hashlib.sha256()
+    hasher.update(password.encode('utf-8'))
+    pwd_hash=hasher.hexdigest()
+
+    query = f"SELECT * FROM Utilisateurs WHERE email = %s AND password = %s"
+    mycursor.execute(f"SELECT * FROM Utilisateurs WHERE email = {email} AND password = {pwd_hash}")
+    user = mycursor.fetchone()
+
+    if user:
+        session['username'] = user[1]  # Supposons que le nom d'utilisateur soit enregistré à l'index 1
+        return redirect('/')
+    else:
+            return "Identifiants invalides. Veuillez réessayer."
+    
+
+
+    #return render_template('formulaire_user_connect.html')
+
+
+
 
 @auth.route('/logout')
 def logout():
-    return 'Logout'
+    session.pop('email', None)
+    return redirect('/')
