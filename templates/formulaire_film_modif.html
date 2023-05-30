@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action="/film/send" method="post"> 
+    <form action="/update/send/{{f[0]}}" method="post"> 
 
         <div>
             <label for="nom"> Nom : </label> 
-            <input type="text" name="nom"> <br><br>
+            <input type="text" name="nom" value="{{f[1]}}"> <br><br>
         </div>
 
         <div>
@@ -20,24 +20,25 @@
             </select> -->
 
             <label for="année"> Année de sortie : </label> 
-            <input type="number" name="année" min="1900" max="2023"> <br><br>
+            <input type="number" name="année" min="1900" max="2023" value="{{f[3]}}"> <br><br>
         </div>
 
         <div>
             <label for="synopsis"> Synopsis : </label> 
-            <!-- <input type="text" name="synopsis"><br><br> -->
-            <textarea name="synopsis"></textarea>
+            <!-- <input type="text" name="synopsis" value="{{f[4]}}"><br><br> -->
+            <textarea name="synopsis">{{f[4]}}</textarea>
+            
         </div>
 
         <div>
             <label for="duree"> Durée (min) : </label> 
-            <input type="text" name="duree"><br><br>
+            <input type="text" name="duree" value="{{f[2]}}"><br><br>
         </div>
 
         <div>
             <label for="genre"> Genre : </label> 
             <select name="genres" id="genre">
-                <option value="" selected="selected" hidden="hidden">--Choisissez un genre--</option>
+                <option value="{{f[5]}}" selected="selected">{{f[5]}}</option>
                     <option value="action">Action</option>
                     <option value="aventure">Aventure</option>
                     <option value="guerre">Guerre</option>
@@ -58,10 +59,10 @@
                     <option value="adulte">Film d'adultes</option>
             </select>
         </div>
-        
+
         <div>
             <label for="film"> </label> 
-            <button type="submit"> AJOUTER</button><br><br>
+            <button type="submit"> Modifier</button><br><br>
         </div>
 
     </form>
