@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import mysql.connector
-from flask import Flask,request,render_template,jsonify,abort, redirect
+from flask import Flask,request,session,    render_template,jsonify,abort, redirect
 from flask_cors import CORS
 import random
+import hashlib 
 
 app = Flask(__name__)
+app.secret_key = 'filmsweb'
 CORS(app)
 
 mydb = mysql.connector.connect(
@@ -24,39 +26,39 @@ commentaires=[]
 def index():
     return redirect("/films")
 
-@app.route("/inscription", methods=['POST'])
-def insert_user():
+# @app.route("/inscription", methods=['POST'])
+# def insert_user():
 
-    global prenom
-    global nom
-    global username
-    global email
-    global password 
+#     global prenom
+#     global nom
+#     global username
+#     global email
+#     global password 
 
-    # Version GET
+#     # Version GET
 
-    # nom = request.args.get("name")
-    # prix = request.args.get("price")
-    # description = request.args.get("depiction")
+#     # nom = request.args.get("name")
+#     # prix = request.args.get("price")
+#     # description = request.args.get("depiction")
 
-    # Version POST
+#     # Version POST
 
-    if(request.method == 'POST'):
-        nom = request.form["nom"]
-        prenom = request.form["prénom"]
-        username = request.form["username"]
-        email = request.form["email"]
-        password = request.form["password"]
-        #games.append( {"name":nom, "price":prix, "depiction":description})
+#     if(request.method == 'POST'):
+#         nom = request.form["nom"]
+#         prenom = request.form["prénom"]
+#         username = request.form["username"]
+#         email = request.form["email"]
+#         password = request.form["password"]
+#         #games.append( {"name":nom, "price":prix, "depiction":description})
     
-    mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, %s)''', (nom, prenom, username, email, password))
-    mydb.commit()
+#     mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, %s)''', (nom, prenom, username, email, password))
+#     mydb.commit()
         
-    return render_template("liste.html")
+#     return render_template("liste.html")
 
-@app.route("/connexion")
-def login():
-   return render_template('formulaire_user_connect.html')
+# @app.route("/connexion")
+# def login():
+#    return render_template('formulaire_user_connect.html')
 
 @app.route("/profil")
 def profil_user():
@@ -177,7 +179,61 @@ def send_update_film(id):
     mydb.commit()
 
     return redirect("/films")
-    
 
+@app.route("/inscription")
+def return_insc():
+    return render_template("formulaire_insc.html")
+
+@app.route("/connexion")
+def return_connexion():
+    return render_template("formulaire_user_connect.html")
+
+@app.route('/inscription/send', methods=['POST'])
+def insert_user():
+    nom = request.form["nom"]
+    prenom = request.form["prénom"]
+    username = request.form["username"]
+    email = request.form["email"]
+    password = request.form["password"]
+
+    #A FAIRE POUR VERIFIER SI LE COMPTE EXISTE DEJA
+    #user = query.filter_by(email=email).first()
+    #if user: 
+    #    return redirect(url_for('auth.signup'))
+    hasher = hashlib.sha256()
+    hasher.update(password.encode('utf-8'))
+    pwd_hash=hasher.hexdigest()
+    
+    #jsp si le password fonctionne
+    mycursor.execute(f"INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES ('{nom}', '{prenom}', '{username}', '{email}', '{pwd_hash}')")
+    mydb.commit()
+
+    # return render_template('formulaire_insc.html')
+    return redirect('profil.html')
+
+@app.route('/connexion/send', methods=["POST"])
+def login():
+
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+    hasher = hashlib.sha256()
+    hasher.update(password.encode('utf-8'))
+    pwd_hash=hasher.hexdigest()
+
+    mycursor.execute("SELECT * FROM Utilisateur WHERE mail = %s AND mdp = %s", (email, pwd_hash))
+    user = mycursor.fetchone()
+
+    if user:
+        session['username'] = user[1]  # Supposons que le nom d'utilisateur soit enregistré à l'index 1
+        return redirect('/')
+    else:
+            return "Identifiants invalides. Veuillez réessayer."
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect('/')
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

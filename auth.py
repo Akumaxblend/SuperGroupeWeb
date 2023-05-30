@@ -14,7 +14,7 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-@auth.route('/inscription', methods=['POST'])
+@auth.route('/inscription/send', methods=['POST'])
 def insert_user():
     nom = request.form.get["nom"]
     prenom = request.form.get["prénom"]

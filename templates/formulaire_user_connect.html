@@ -10,7 +10,7 @@
     {% endif %}
     {% endwith %}
     
-    <form action="/connexion" method="post">
+    <form action="/connexion/send" method="post">
     
         <div>
             <label for="email"> email : </label> 
@@ -31,7 +31,7 @@
 
     <div>
         <label for="inscription"> Vous avez déjà un compte ? </label> 
-        <a href="formulaire_insc.html"><button> INSCRIPTION</button></a>
+        <a href="/inscription"><button> INSCRIPTION</button></a>
     </div>
 
 {% endblock %}
