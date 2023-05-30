@@ -17,19 +17,11 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-# mycursor.execute('''select * from Genre''')
-# etuds = mycursor.fetchall()
-# mydb.commit()
-# print(etuds)
-
 films = []
 commentaires=[]
 
 @app.route("/")
 def index():
-    
-    #return ("<html><body><p1>Hello world</p1></body></html>")
-    #return render_template("formulaire_insc.html")
     return redirect("/films")
 
 @app.route("/inscription", methods=['POST'])
@@ -101,10 +93,7 @@ def display_films():
 
     films.clear()
 
-    mycursor.execute('''SELECT COUNT(*) FROM Film''')
-    filmsCount = mycursor.fetchone()
-
-    mycursor.execute('''SELECT * FROM Film''')
+    mycursor.execute('''SELECT * FROM Film ORDER BY created_at DESC''')
 
     for tmp in mycursor:
 
@@ -165,7 +154,6 @@ def delete_film(titre, annee):
 def update_film(titre, annee):
     mycursor.execute('''SELECT * from Film WHERE titre = %s AND anneSortie = %s''', (titre, annee))
     film = mycursor.fetchone()
-    print(film[1])
     return render_template("formulaire_film_modif.html", f = film)
 
 @app.route("/update/send/<int:id>", methods=["POST"])
