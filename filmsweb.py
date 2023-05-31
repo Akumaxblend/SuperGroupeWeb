@@ -26,41 +26,18 @@ commentaires=[]
 def index():
     return redirect("/films")
 
-# @app.route("/inscription", methods=['POST'])
-# def insert_user():
-
-#     global prenom
-#     global nom
-#     global username
-#     global email
-#     global password 
-
-#     # Version GET
-
-#     # nom = request.args.get("name")
-#     # prix = request.args.get("price")
-#     # description = request.args.get("depiction")
-
-#     # Version POST
-
-#     if(request.method == 'POST'):
-#         nom = request.form["nom"]
-#         prenom = request.form["prénom"]
-#         username = request.form["username"]
-#         email = request.form["email"]
-#         password = request.form["password"]
-#         #games.append( {"name":nom, "price":prix, "depiction":description})
-    
-#     mycursor.execute('''INSERT INTO Utilisateur (nom, prenom, pseudo, mail, mdp) VALUES (%s, %s, %s, %s, %s)''', (nom, prenom, username, email, password))
-#     mydb.commit()
-        
-#     return render_template("liste.html")
-
-# @app.route("/connexion")
-# def login():
-#    return render_template('formulaire_user_connect.html')
+def utilisateur_connecte(fonction):
+    def verifie_connexion():
+        if 'username' in session:
+            # L'utilisateur est connecté, exécutez la route protégée
+            return fonction()
+        else:
+            # L'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
+            return redirect('/login')
+    return verifie_connexion
 
 @app.route("/profil")
+@utilisateur_connecte
 def profil_user():
 
     films.clear()
@@ -75,10 +52,12 @@ def profil_user():
 
 
 @app.route("/saisie_film")
+@utilisateur_connecte
 def form_films():
     return render_template("formulaire_film.html")
 
 @app.route("/film/send", methods=["POST"])
+@utilisateur_connecte
 def insert_film():
 
     global nom_film
@@ -141,6 +120,7 @@ def show_film(idFilm):
 
 
 @app.route("/commentaires/send/<int:idFilm>+<string:username>", methods=["POST"])
+@utilisateur_connecte
 def insert_com(idFilm, username):
 
     global texte
@@ -159,18 +139,21 @@ def insert_com(idFilm, username):
 # @app.route("/films/<int:idFilm>")
 
 @app.route("/delete/<string:titre>+<int:annee>")
+@utilisateur_connecte
 def delete_film(titre, annee):
     mycursor.execute('''DELETE from Film WHERE titre = %s AND anneSortie = %s''', (titre, annee))
     mydb.commit()
     return redirect("/films")
 
 @app.route("/update/<string:titre>+<int:annee>")
+@utilisateur_connecte
 def update_film(titre, annee):
     mycursor.execute('''SELECT * from Film WHERE titre = %s AND anneSortie = %s''', (titre, annee))
     film = mycursor.fetchone()
     return render_template("formulaire_film_modif.html", f = film)
 
 @app.route("/update/send/<int:id>", methods=["POST"])
+@utilisateur_connecte
 def send_update_film(id):
 
     global nom_film
@@ -250,5 +233,14 @@ def login():
 def logout():
     session.pop('username', None)
     return redirect('/')
+
+
+
+@app.route('/page-securisee')
+@utilisateur_connecte
+def page_securisee():
+    return "Ceci est une page sécurisée. L'utilisateur doit être connecté pour y accéder."
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
