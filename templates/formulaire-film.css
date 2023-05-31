@@ -10,6 +10,8 @@ label{
 
 form{
     margin : auto;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
     background-color : #FFDBE7;
     padding : 20px;
