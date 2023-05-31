@@ -2,6 +2,37 @@
 
 {% block content %}
 
-    <h1>{{ utilisateur[1] }}</h1>
+    {% if session['username'] %}
+        <h1>Bonjour {{ session['username'] }} !</h1>
+        {%if films%}
+            <h2>Liste de tes films ajoutés : </h2>
+            <table>
+                <tr>
+                    <td name="entete"><h1>Nom</h1></td>
+                    <td name="entete"><h1>Annee de sortie</h1></td>
+                    <td name="entete"><h1>Synopsis</h1></td>
+                    <td name="entete"><h1>Duree</h1></td>
+                    <td name="entete"><h1>Genre</h1></td>
+                </tr>
+                {% for film in films%}
+                <tr>
+                    <td><a href="/films/{{film.idFilm}}">{{film.titre}}</a></td>
+                    <td>{{film.annee}}</td>
+                    <td>{{film.synopsis}}</td>
+                    <td>{{film.duree}}</td>
+                    <td>{{film.genre}}</td>
+                    {% if film.creator==session['idUser'] %}
+                        <td><a href="delete/{{film.titre}}+{{film.annee}}"><button>Supprimer</button></a></td>
+                        <td><a href="update/{{film.titre}}+{{film.annee}}"><button>Modifier</button></a></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+        {%else%}
+            <h2>Tu n'as pas encore ajouté de film.</h2>
+        {%endif%}
+    {% else %}
+        <h1>Pas de session en cours, connectez-vous !</h1>
+    {% endif %}
 
 {% endblock %}

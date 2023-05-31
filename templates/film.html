@@ -2,6 +2,11 @@
 
 {% block content %}
 
+    {% if film[7]==session['idUser'] %}
+        <td><a href="/delete/{{film[1]}}+{{film[3]}}"><button>Supprimer</button></a></td>
+        <td><a href="/update/{{film[1]}}+{{film[3]}}"><button>Modifier</button></a></td>
+    {% endif %}
+
     <h1>{{ film[1] }}</h1>
 
     <div>
@@ -14,15 +19,10 @@
     <h2>Commentaires</h2>
 
     <div>
-        <div>formulaire comm</div>
+        <!-- <div>formulaire comm</div> -->
 
-        <form action="/commentaires/send/{{film[0]}}" method="post">
+        <form action="/commentaires/send/{{film[0]}}+{{session['pseudo']}}" method="post">
         
-            <div>
-                <label for="pseudo"> Votre pseudo : </label> 
-                <input type="text" name="pseudo"> <br><br>
-            </div>
-
             <div>
                 <label for="texte"> Ecrire Commentaire : </label> 
                 <textarea type="text" name="texte"></textarea> <br><br>
@@ -36,7 +36,7 @@
         </form>
 
 
-        <div>affichage com</div>
+        <!-- <div>affichage com</div> -->
 
         {% if c %}
         <table>

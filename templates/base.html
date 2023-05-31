@@ -28,25 +28,32 @@
     </style>
 </head>
 <body>
+    {% if session['username'] %}
+        <header class="hero is-primary is-fullheight">
 
-    <header class="hero is-primary is-fullheight">
+            <div class="hero-head">
+                <nav class="navbar">
+                    <a href="/">Accueil</a>
+                    <a href="/profil">Profil</a>
+                    <a href="/logout">Déconnexion</a>
+                </nav>
+            </div>
+        </header>
+    {% else %}
+        <header class="hero is-primary is-fullheight">
 
-        <div class="hero-head">
-            <nav class="navbar">
-                <div class="container">
+            <div class="hero-head">
+                <nav class="navbar">
+                    <a href="/">Accueil</a>
+                    <a href="/connexion">Connexion</a>
+                    <a href="/inscription">Inscription</a>
+                </nav>
+            </div>
 
-                    <div id="navbarMenuHeroA" class="navbar-menu">
-                        <div class="navbar-end">
-                            
-                            
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-
-        
-    </header>
+            
+        </header>
+    {% endif %}
+    
 
     <main class="hero-body">
         <div class="container has-text-centered">

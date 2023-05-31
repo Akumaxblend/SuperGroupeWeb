@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if session['username'] %}
+        <a href="/saisie_film"><button>Saisir un film</button></a>
+    {% endif %}
 
-    <a href="/saisie_film"><button>Saisir un film</button></a>
     {% if f %}
 
     <table>
@@ -26,8 +28,11 @@
             <td>{{film.synopsis}}</td>
             <td>{{film.duree}}</td>
             <td>{{film.genre}}</td>
-            <td><a href="delete/{{film.titre}}+{{film.annee}}"><button>Supprimer</button></a></td>
-            <td><a href="update/{{film.titre}}+{{film.annee}}"><button>Modifier</button></a></td>
+
+            <!-- {% if film.creator==session['idUser'] %}
+                <td><a href="delete/{{film.titre}}+{{film.annee}}"><button>Supprimer</button></a></td>
+                <td><a href="update/{{film.titre}}+{{film.annee}}"><button>Modifier</button></a></td>
+            {% endif %} -->
 
         </tr>
 

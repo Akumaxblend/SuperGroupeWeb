@@ -62,7 +62,16 @@ def index():
 
 @app.route("/profil")
 def profil_user():
-    return render_template("useraccount.html")
+
+    films.clear()
+
+    mycursor.execute('''SELECT * FROM Film WHERE creator = %s ORDER BY created_at DESC''', (session['idUser'],))
+
+    for tmp in mycursor:
+
+        films.append({"idFilm": tmp[0], "titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4], "genre":tmp[5], "creator":tmp[7]})
+
+    return render_template("profil.html", films = films)
 
 
 @app.route("/saisie_film")
@@ -84,8 +93,11 @@ def insert_film():
         annee = request.form["année"]
         synopsis = request.form["synopsis"]
         genre = request.form["genres"]
+        
 
-    mycursor.execute('''INSERT INTO Film(titre, duree, anneSortie, synopsis, genre) VALUES (%s, %s, %s, %s, %s)''', (nom_film, duree, annee, synopsis, genre))
+    user_id = session['idUser']
+    print(user_id)
+    mycursor.execute('''INSERT INTO Film(titre, duree, anneSortie, synopsis, genre, creator) VALUES (%s, %s, %s, %s, %s,%s)''', (nom_film, duree, annee, synopsis, genre,user_id))
     mydb.commit()
 
     return redirect("/films")
@@ -99,7 +111,7 @@ def display_films():
 
     for tmp in mycursor:
 
-        films.append({"idFilm": tmp[0], "titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4], "genre":tmp[5]})
+        films.append({"idFilm": tmp[0], "titre":tmp[1], "duree":tmp[2], "annee":tmp[3], "synopsis":tmp[4], "genre":tmp[5], "creator":tmp[7]})
 
     return render_template("liste.html", f = films)
 
@@ -128,15 +140,15 @@ def show_film(idFilm):
     return render_template("/film.html", c = commentaires, film=film)
 
 
-@app.route("/commentaires/send/<int:idFilm>", methods=["POST"])
-def insert_com(idFilm):
+@app.route("/commentaires/send/<int:idFilm>+<string:username>", methods=["POST"])
+def insert_com(idFilm, username):
 
     global texte
     global pseudo
 
     if(request.method == 'POST'):
         texte = request.form["texte"]
-        pseudo = request.form["pseudo"]
+        pseudo = username
         
 
     mycursor.execute('''INSERT INTO Commentaire(texte, pseudo, idFilm) VALUES (%s, %s, %s)''', (texte, pseudo, idFilm))
@@ -209,7 +221,7 @@ def insert_user():
     mydb.commit()
 
     # return render_template('formulaire_insc.html')
-    return redirect('profil.html')
+    return redirect('/films')
 
 @app.route('/connexion/send', methods=["POST"])
 def login():
@@ -222,11 +234,14 @@ def login():
     hasher.update(password.encode('utf-8'))
     pwd_hash=hasher.hexdigest()
 
-    mycursor.execute("SELECT * FROM Utilisateur WHERE mail = %s AND mdp = %s", (email, pwd_hash))
+    mycursor.execute("SELECT * FROM Utilisateur WHERE mail = %s AND mdp = %s LIMIT 0,1", (email, pwd_hash))
     user = mycursor.fetchone()
 
     if user:
-        session['username'] = user[1]  # Supposons que le nom d'utilisateur soit enregistré à l'index 1
+        session['username'] = user[2]  # Supposons que le nom d'utilisateur soit enregistré à l'index 1
+        session['idUser'] = user[0]
+        session['pseudo'] = user[3]
+        print(session['pseudo'])
         return redirect('/')
     else:
             return "Identifiants invalides. Veuillez réessayer."
