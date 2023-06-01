@@ -2,37 +2,39 @@
 
 {% block content %}
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <div class="notification is-danger">
-            {{ messages[0] }}
-        </div>
-    {% endif %}
-    {% endwith %}
-    
-    <form action="/connexion/send" method="post">
-    
-        <div>
-            <label for="email"> email : </label> 
-            <input type="text" name="email"> <br><br>
-        </div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        
+        <form action="/connexion/send" method="post">
+        
+            <div>
+                <label for="email"> email : </label> 
+                <input type="text" name="email"> <br><br>
+            </div>
+
+            <div>
+                <label for="password"> Password : </label> 
+                <input type="password" name="password"> <br><br>
+            </div>
+
+            <div>
+                <label for="compte"> </label> 
+                <button type="submit"> VALIDER</button><br><br>
+            </div>
+
+        </form>
 
         <div>
-            <label for="password"> Password : </label> 
-            <input type="password" name="password"> <br><br>
+            <label for="inscription"> Vous n'avez pas de compte ? </label> 
+            <a href="/inscription"><button> INSCRIPTION</button></a>
         </div>
 
-        <div>
-            <label for="compte"> </label> 
-            <button type="submit"> VALIDER</button><br><br>
-        </div>
-
-    </form>
-
-    <div>
-        <label for="inscription"> Vous avez déjà un compte ? </label> 
-        <a href="/inscription"><button> INSCRIPTION</button></a>
-    </div>
 
 {% endblock %}
 

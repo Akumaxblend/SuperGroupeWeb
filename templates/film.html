@@ -21,19 +21,25 @@
     <div>
         <!-- <div>formulaire comm</div> -->
 
-        <form action="/commentaires/send/{{film[0]}}+{{session['pseudo']}}" method="post">
+        {% if session['username'] %}
+
+            <form action="/commentaires/send/{{film[0]}}+{{session['pseudo']}}" method="post">
+            
+                <div>
+                    <label for="texte"> Ecrire Commentaire : </label> 
+                    <textarea type="text" name="texte"></textarea> <br><br>
+                </div>
+            
+                <div>
+                    <label for="commentaire"> </label> 
+                    <button type="submit"> Envoyer com</button><br><br>
+                </div>
         
-            <div>
-                <label for="texte"> Ecrire Commentaire : </label> 
-                <textarea type="text" name="texte"></textarea> <br><br>
-            </div>
-        
-            <div>
-                <label for="commentaire"> </label> 
-                <button type="submit"> Envoyer com</button><br><br>
-            </div>
-    
-        </form>
+            </form>
+
+        {% else %}
+            <h1>Pas de session en cours, <a href="/connexion">connectez-vous pour poster un commentaire !</a></h1>
+        {% endif %}
 
 
         <!-- <div>affichage com</div> -->

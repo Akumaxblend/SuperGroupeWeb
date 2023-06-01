@@ -21,23 +21,14 @@ mycursor = mydb.cursor()
 
 films = []
 commentaires=[]
+connected = ""
 
 @app.route("/")
 def index():
     return redirect("/films")
 
-def utilisateur_connecte(fonction):
-    def verifie_connexion():
-        if 'username' in session:
-            # L'utilisateur est connecté, exécutez la route protégée
-            return fonction()
-        else:
-            # L'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
-            return redirect('/login')
-    return verifie_connexion
 
 @app.route("/profil")
-@utilisateur_connecte
 def profil_user():
 
     films.clear()
@@ -52,12 +43,10 @@ def profil_user():
 
 
 @app.route("/saisie_film")
-@utilisateur_connecte
 def form_films():
     return render_template("formulaire_film.html")
 
 @app.route("/film/send", methods=["POST"])
-@utilisateur_connecte
 def insert_film():
 
     global nom_film
@@ -120,7 +109,6 @@ def show_film(idFilm):
 
 
 @app.route("/commentaires/send/<int:idFilm>+<string:username>", methods=["POST"])
-@utilisateur_connecte
 def insert_com(idFilm, username):
 
     global texte
@@ -139,21 +127,18 @@ def insert_com(idFilm, username):
 # @app.route("/films/<int:idFilm>")
 
 @app.route("/delete/<string:titre>+<int:annee>")
-@utilisateur_connecte
 def delete_film(titre, annee):
     mycursor.execute('''DELETE from Film WHERE titre = %s AND anneSortie = %s''', (titre, annee))
     mydb.commit()
     return redirect("/films")
 
 @app.route("/update/<string:titre>+<int:annee>")
-@utilisateur_connecte
 def update_film(titre, annee):
     mycursor.execute('''SELECT * from Film WHERE titre = %s AND anneSortie = %s''', (titre, annee))
     film = mycursor.fetchone()
     return render_template("formulaire_film_modif.html", f = film)
 
 @app.route("/update/send/<int:id>", methods=["POST"])
-@utilisateur_connecte
 def send_update_film(id):
 
     global nom_film
@@ -204,7 +189,7 @@ def insert_user():
     mydb.commit()
 
     # return render_template('formulaire_insc.html')
-    return redirect('/films')
+    return redirect('/connexion')
 
 @app.route('/connexion/send', methods=["POST"])
 def login():
@@ -224,6 +209,7 @@ def login():
         session['username'] = user[2]  # Supposons que le nom d'utilisateur soit enregistré à l'index 1
         session['idUser'] = user[0]
         session['pseudo'] = user[3]
+        connected = "c"
         print(session['pseudo'])
         return redirect('/')
     else:
@@ -233,14 +219,6 @@ def login():
 def logout():
     session.pop('username', None)
     return redirect('/')
-
-
-
-@app.route('/page-securisee')
-@utilisateur_connecte
-def page_securisee():
-    return "Ceci est une page sécurisée. L'utilisateur doit être connecté pour y accéder."
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

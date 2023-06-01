@@ -1,71 +1,77 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action="/update/send/{{f[0]}}" method="post"> 
+    {% if session['username'] %}
+        <form action="/update/send/{{f[0]}}" method="post"> 
 
-        <div>
-            <label for="nom"> Nom : </label> 
-            <input type="text" name="nom" value="{{f[1]}}"> <br><br>
-        </div>
+            <div>
+                <label for="nom"> Nom : </label> 
+                <input type="text" name="nom" value="{{f[1]}}"> <br><br>
+            </div>
 
-        <div>
-            <!-- <script></script>
+            <div>
+                <!-- <script></script>
 
-            <select year="year">
-            
-            for(int i=1900; i<2023; i++){
-                <option value="i">i</option>
-            }
+                <select year="year">
+                
+                for(int i=1900; i<2023; i++){
+                    <option value="i">i</option>
+                }
 
-            </select> -->
+                </select> -->
 
-            <label for="année"> Année de sortie : </label> 
-            <input type="number" name="année" min="1900" max="2023" value="{{f[3]}}"> <br><br>
-        </div>
+                <label for="année"> Année de sortie : </label> 
+                <input type="number" name="année" min="1900" max="2023" value="{{f[3]}}"> <br><br>
+            </div>
 
-        <div>
-            <label for="synopsis"> Synopsis : </label> 
-            <!-- <input type="text" name="synopsis" value="{{f[4]}}"><br><br> -->
-            <textarea name="synopsis">{{f[4]}}</textarea>
-            
-        </div>
+            <div>
+                <label for="synopsis"> Synopsis : </label> 
+                <!-- <input type="text" name="synopsis" value="{{f[4]}}"><br><br> -->
+                <textarea name="synopsis">{{f[4]}}</textarea>
+                
+            </div>
 
-        <div>
-            <label for="duree"> Durée (min) : </label> 
-            <input type="text" name="duree" value="{{f[2]}}"><br><br>
-        </div>
+            <div>
+                <label for="duree"> Durée (min) : </label> 
+                <input type="text" name="duree" value="{{f[2]}}"><br><br>
+            </div>
 
-        <div>
-            <label for="genre"> Genre : </label> 
-            <select name="genres" id="genre">
-                <option value="{{f[5]}}" selected="selected">{{f[5]}}</option>
-                    <option value="action">Action</option>
-                    <option value="aventure">Aventure</option>
-                    <option value="guerre">Guerre</option>
-                    <option value="histoire">Histoire</option>
-                    <option value="comedie">Comédie</option>
-                    <option value="drame">Drame</option>
-                    <option value="comediedramatique">Comédie dramatique</option>
-                    <option value="animation">Film d'animation</option>
-                    <option value="jeunesse">Film jeunesse</option>
-                    <option value="musical">Film musical</option>
-                    <option value="policier">Policier</option>
-                    <option value="espionnage">Espionnage</option>
-                    <option value="sciencefiction">Science-fiction</option>
-                    <option value="fantastique">Fantastique</option>
-                    <option value="horreur">Horreur</option>
-                    <option value="western">Western</option>
-                    <option value="documentaire">Documentaire</option>
-                    <option value="adulte">Film d'adultes</option>
-            </select>
-        </div>
+            <div>
+                <label for="genre"> Genre : </label> 
+                <select name="genres" id="genre">
+                    <option value="{{f[5]}}" selected="selected">{{f[5]}}</option>
+                        <option value="action">Action</option>
+                        <option value="aventure">Aventure</option>
+                        <option value="guerre">Guerre</option>
+                        <option value="histoire">Histoire</option>
+                        <option value="comedie">Comédie</option>
+                        <option value="drame">Drame</option>
+                        <option value="comediedramatique">Comédie dramatique</option>
+                        <option value="animation">Film d'animation</option>
+                        <option value="jeunesse">Film jeunesse</option>
+                        <option value="musical">Film musical</option>
+                        <option value="policier">Policier</option>
+                        <option value="espionnage">Espionnage</option>
+                        <option value="sciencefiction">Science-fiction</option>
+                        <option value="fantastique">Fantastique</option>
+                        <option value="horreur">Horreur</option>
+                        <option value="western">Western</option>
+                        <option value="documentaire">Documentaire</option>
+                        <option value="adulte">Film d'adultes</option>
+                </select>
+            </div>
 
-        <div>
-            <label for="film"> </label> 
-            <button type="submit"> Modifier</button><br><br>
-        </div>
+            <div>
+                <label for="film"> </label> 
+                <button type="submit"> Modifier</button><br><br>
+            </div>
 
-    </form>
+        </form>
+
+    {% else %}
+        <h1>Pas de session en cours, <a href="/connexion">connectez-vous !</a></h1>
+    {% endif %}
+
 {% endblock %}
 
     
