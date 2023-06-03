@@ -99,7 +99,7 @@ def show_film(idFilm):
 
     commentaires.clear()
 
-    mycursor.execute(f"SELECT * FROM Commentaire WHERE idFilm={idFilm}")
+    mycursor.execute(f"SELECT * FROM Commentaire WHERE idFilm={idFilm} ORDER BY created_at DESC")
 
     for tmp in mycursor:
 
